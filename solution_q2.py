@@ -1,5 +1,6 @@
+import time
+
 import gymnasium as gym
-env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=True)
 
 class transFunc():
 
@@ -49,7 +50,7 @@ def printGrid(grid: []):
     print(out)
 
 # Q2.2
-def learn(Rarray: []) -> {}:
+def learn(Rarray: [], env) -> {}:
     observation, info = env.reset()
     startState = observation
     out = {}
@@ -121,12 +122,18 @@ def solve(T: {}, R: [], V: []) -> []:
     printGrid(P)
     return P
 
-def apply(P: []) -> int:
-    pass
+# Q2.5
+def apply(P: [], state: int) -> int:
+    out = P[state]
+    if out < 0:
+        raise Exception("Can not provide action for terminal state")
+    return out
 
 if __name__ == "__main__":
+    env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=True)
     Rarray = [0.0 for x in range(16)]
-    Tarray = learn(Rarray)
+    Tarray = learn(Rarray, env)
+    env.close()
 
     # for x in sorted(Tarray.keys()):
     #     Tarray[x].print()
@@ -135,6 +142,17 @@ if __name__ == "__main__":
 
     Varray = study(Tarray, Rarray)
     ActionArray = solve(Tarray, Rarray, Varray)
+
+    # testing policy
+    env = gym.make("FrozenLake-v1", desc=None, map_name="4x4", render_mode="human",
+                    is_slippery=True, )
+
+    terminated = 0
+    truncated = 0
+    observation, info = env.reset()
+    while not terminated and not truncated:
+        action = apply(ActionArray, observation)
+        observation, reward, terminated, truncated, info = env.step(action)
 
     env.close()
     
