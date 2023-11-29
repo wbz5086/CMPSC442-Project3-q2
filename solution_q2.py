@@ -2,7 +2,7 @@ import time
 
 import gymnasium as gym
 
-class transFunc():
+class TFunc():
 
     def __init__(self, startstate: int, action: int, endstate: int) -> None:
         self.sstate = startstate
@@ -68,7 +68,7 @@ def learn(Rarray: [], env) -> {}:
             if out.get(key):
                 out[key].add(observation)
             else:
-                out[key] = transFunc(startState, action, observation)
+                out[key] = TFunc(startState, action, observation)
                 Rarray[observation] = reward
             
             startState = observation
