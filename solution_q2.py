@@ -50,12 +50,13 @@ def printGrid(grid: []):
     print(out)
 
 # Q2.2
+# Note: possible crash, 1000 is not enough to guarantee an action that reaches the goal
 def learn(Rarray: [], env) -> {}:
     observation, info = env.reset()
     startState = observation
     out = {}
 
-    for x in range(1000):
+    for _ in range(1000):
         terminated = 0
         truncated = 0
         while not terminated and not truncated:
@@ -99,7 +100,7 @@ def study(T: {}, R: []) -> []:
                 m = R[s]
             V1[s] = m
         V = V1
-        printGrid(V)
+        # printGrid(V)
     return V
 
 # Q2.4
@@ -119,7 +120,7 @@ def solve(T: {}, R: [], V: []) -> []:
                     m = sum
                     ma = a
         P[s] = ma
-    printGrid(P)
+    # printGrid(P)
     return P
 
 # Q2.5
@@ -151,6 +152,7 @@ if __name__ == "__main__":
     truncated = 0
     observation, info = env.reset()
     while not terminated and not truncated:
+        # if this crashes, see note on Q2.2
         action = apply(ActionArray, observation)
         observation, reward, terminated, truncated, info = env.step(action)
 
