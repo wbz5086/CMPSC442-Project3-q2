@@ -76,12 +76,12 @@ def learn(Rarray: []) -> {}:
 
     return out
 
-discount_factor = 0.9
+discount_factor = 1.0
 # Q2.3
 def study(T: {}, R: []) -> []:
     V = R
     # iteration layer
-    for i in range(50):
+    for i in range(100):
         V1 = [0.0 for x in range(16)]
         # for each state
         for s in range(16):
@@ -98,14 +98,30 @@ def study(T: {}, R: []) -> []:
                 m = R[s]
             V1[s] = m
         V = V1
-        # printGrid(V)
+        printGrid(V)
     return V
 
+# Q2.4
+def solve(T: {}, R: [], V: []) -> []:
+    P = [0 for x in range(16)]
+    for s in range(16):
+        m = 0.0
+        ma = -1
+        # for each action
+        for a in range(4):
+            if func := T.get(tokey(s, a)):
+                # summation
+                sum = 0
+                for x in func.getEndState():
+                    sum += func.getProb(x) * (R[s] + discount_factor * V[x])
+                if sum > m:
+                    m = sum
+                    ma = a
+        P[s] = ma
+    printGrid(P)
+    return P
 
-def solve():
-    pass
-
-def apply():
+def apply(P: []) -> int:
     pass
 
 if __name__ == "__main__":
@@ -118,6 +134,7 @@ if __name__ == "__main__":
     #     print("{} ".format(x))
 
     Varray = study(Tarray, Rarray)
+    ActionArray = solve(Tarray, Rarray, Varray)
 
     env.close()
     
