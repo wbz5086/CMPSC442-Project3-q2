@@ -1,5 +1,3 @@
-import time
-
 import gymnasium as gym
 
 class TFunc():
