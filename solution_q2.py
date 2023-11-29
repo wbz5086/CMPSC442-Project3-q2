@@ -67,6 +67,7 @@ def learn(Rarray: [], env) -> {}:
             key = tokey(startState, action)
             if out.get(key):
                 out[key].add(observation)
+                Rarray[observation] = max(reward, Rarray[observation])
             else:
                 out[key] = TFunc(startState, action, observation)
                 Rarray[observation] = reward
